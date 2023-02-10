@@ -84,8 +84,17 @@ class Program
 
     private static void OnUpdate(double deltaTime)
     {
-        MoveHorizontal((int)(joystick.Axes[0].Position * 30));
-        MoveVertical((int)(joystick.Axes[1].Position * 30));
+        var horizontal = (int)(joystick.Axes[0].Position * 30);
+        var vertical = (int)(joystick.Axes[1].Position * 30);
+
+        if (Math.Abs(horizontal) > Math.Abs(vertical))
+        {
+            MoveHorizontal(horizontal);
+        }
+        else
+        {
+            MoveVertical(vertical);
+        }
     }
 }
 
