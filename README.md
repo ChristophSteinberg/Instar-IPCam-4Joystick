@@ -21,11 +21,12 @@ All CGI actions for Instar Cam 9020HD on: https://wiki.instar.com/de/1080p_Serie
 
 ## Developer info
 ### Install Visual Studio Code
+```bash
 Microsoft.NET.Sdk
 .NETFramework Version=v4.0 
 SharpDX.DirectInput 
 SharpDX --version 4.2.0
-
+```
 ### Run and build the app
 First you have to install all packages from above.
 To build an exe file:
