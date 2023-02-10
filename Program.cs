@@ -1,105 +1,179 @@
 ﻿using System;
-using System.Net;
-using SharpDX.DirectInput;
+using Silk.NET.Windowing;
+using Silk.NET.Input;
+using System.Linq;
+using System.Net.Http;
+using System.Text;
 
-namespace JoystickCameraControl
+namespace JoystickCameraControl;
+
+class Program
 {
-    class Program
+    private static IWindow window;
+    private static IJoystick joystick;
+    private static HttpClient client;
+    private static string username;
+    private static string password;
+    private static string host;
+    private static string port;
+
+    static void Main(string[] args)
     {
-        private static bool moveCameraUp;
-
-        static void Main(string[] args)
+        if (args.Length != 4)
         {
-            DirectInput dinput = new DirectInput();
-            Joystick joystick = null;
+            Console.WriteLine("myapp [user] [password] [domain] [port]");
+            Environment.Exit(1);
+        }
 
-            foreach (var deviceInstance in dinput.GetDevices(DeviceType.Joystick, DeviceEnumerationFlags.AllDevices))
-            {
-                joystick = new Joystick(dinput, deviceInstance.InstanceGuid);
-                break;
-            }
+        username = args[0];
+        password = args[1];
+        host = args[2];
+        port = args[3];
 
-            joystick.Acquire();
+        InitializeWebClient();
 
-            while (true)
-            {
-                joystick.Poll();
-                JoystickState state = joystick.GetCurrentState();
+        var options = WindowOptions.Default;
+        options.UpdatesPerSecond = 4;
+        options.IsVisible = false;
+        window = Window.Create(options);
 
-                if (state.Buttons[4])
-                {
-                    Console.WriteLine("Rotation Left");
-                    string username = "admin";
-                    string password = "Passwort";
-                    string domain = "Cam-IP";
-                    int port = 80;
+        window.Load += OnLoad;
+        window.Update += OnUpdate;
+        window.Run();
+    }
 
-                    string command = "ptzctrl.cgi?-step=0&-act=left&-speed=15";
-                    string url = "http://" + domain + ":" + port + "/" + command;
-                    var client = new WebClient();
-                    client.Credentials = new NetworkCredential(username, password);
-                    var response = client.DownloadString(url);
-                    Console.WriteLine(response);
-                }
-                else if (state.Buttons[5])
-                {
-                    Console.WriteLine("Rotation Right");
-                    string username = "admin";
-                    string password = "Passwort";
-                    string domain = "Cam-IP";
-                    int port = 80;
+    private static void InitializeWebClient()
+    {
+        client = new HttpClient();
+        var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
+        client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+    }
 
-                    string command = "ptzctrl.cgi?-step=0&-act=right&-speed=15";
-                    string url = "http://" + domain + ":" + port + "/" + command;
-                    var client = new WebClient();
-                    client.Credentials = new NetworkCredential(username, password);
-                    var response = client.DownloadString(url);
-                    Console.WriteLine(response);
-                }
-                else if (state.Buttons[2])
-                {
-                    Console.WriteLine("Return to Initial Position");
-                    string username = "admin";
-                    string password = "Passwort";
-                    string domain = "Cam-IP";
-                    int port = 80;
+    private static void MoveHorizontal(int speed)
+    {
+        string direction = speed > 0 ? "right" : "left";
+        SendCommand($"ptzctrl.cgi?-step=0&-act={direction}&-speed={Math.Abs(speed)}");
+    }
 
-                    string command = "ptzctrl.cgi?-step=0&-act=home&-speed=0";
-                    string url = "http://" + domain + ":" + port + "/" + command;
-                    var client = new WebClient();
-                    client.Credentials = new NetworkCredential(username, password);
-                    var response = client.DownloadString(url);
-                    Console.WriteLine(response);
-                }
-                else if (state.Buttons[3])
-                {
-                    Console.WriteLine("Move Up or Down");
-                    string username = "admin";
-                    string password = "Passwort";
-                    string domain = "Cam-IP";
-                    int port = 80;
+    private static void MoveVertical(int speed)
+    {
+        string direction = speed > 0 ? "down" : "up";
+        SendCommand($"ptzctrl.cgi?-step=0&-act={direction}&-speed={Math.Abs(speed)}");
+    }
 
-                    string command = "";
-                    if (moveCameraUp)
-                    {
-                        Console.WriteLine("Moving Camera Up");
-                        command = "ptzctrl.cgi?-step=0&-act=up&-speed=6";
-                        moveCameraUp = false;
-                    }
-                    else
-                    {
-                        Console.WriteLine("Moving Camera Down");
-                        command = "ptzctrl.cgi?-step=0&-act=down&-speed=6";
-                        moveCameraUp = true;
-                    }
+    private static void SendCommand(string command)
+    {
+        string url = host + ":" + port + "/" + command;
+        Console.WriteLine(url);
+        try
+        {
+            var response = client.GetAsync(url).GetAwaiter().GetResult();
+            Console.WriteLine(response.Content.ReadAsStringAsync().GetAwaiter().GetResult());
+        }
+        catch (HttpRequestException e)
+        {
+            Console.WriteLine(e.Message);
+        }
+    }
 
-                    string url = "http://" + domain + ":" + port + "/" + command;
-                    var client = new WebClient();
-                    client.Credentials = new NetworkCredential(username, password);
-                    var response = client.DownloadString(url);
-                    Console.WriteLine(response);
-                }
-            }
+    private static void OnLoad()
+    {
+        var input = window.CreateInput();
+        joystick = input.Joysticks.FirstOrDefault();
+    }
+
+    private static void OnUpdate(double deltaTime)
+    {
+        var horizontal = (int)(joystick.Axes[0].Position * 30);
+        var vertical = (int)(joystick.Axes[1].Position * 30);
+
+        if (Math.Abs(horizontal) > Math.Abs(vertical))
+        {
+            MoveHorizontal(horizontal);
+        }
+        else
+        {
+            MoveVertical(vertical);
         }
     }
 }
+
+
+
+//     if (state.Buttons[4])
+//     {
+//         Console.WriteLine("Rotation Left");
+//         string username = "admin";
+//         string password = "Passwort";
+//         string domain = "Cam-IP";
+//         int port = 80;
+
+//         string command = "ptzctrl.cgi?-step=0&-act=left&-speed=15";
+//         string url = "http://" + domain + ":" + port + "/" + command;
+//         var client = new WebClient();
+//         client.Credentials = new NetworkCredential(username, password);
+//         var response = client.DownloadString(url);
+//         Console.WriteLine(response);
+//     }
+//     else if (state.Buttons[5])
+//     {
+//         Console.WriteLine("Rotation Right");
+//         string username = "admin";
+//         string password = "Passwort";
+//         string domain = "Cam-IP";
+//         int port = 80;
+
+//         string command = "ptzctrl.cgi?-step=0&-act=right&-speed=15";
+//         string url = "http://" + domain + ":" + port + "/" + command;
+//         var client = new WebClient();
+//         client.Credentials = new NetworkCredential(username, password);
+//         var response = client.DownloadString(url);
+//         Console.WriteLine(response);
+//     }
+//     else if (state.Buttons[2])
+//     {
+//         Console.WriteLine("Return to Initial Position");
+//         string username = "admin";
+//         string password = "Passwort";
+//         string domain = "Cam-IP";
+//         int port = 80;
+
+//         string command = "ptzctrl.cgi?-step=0&-act=home&-speed=0";
+//         string url = "http://" + domain + ":" + port + "/" + command;
+//         var client = new WebClient();
+//         client.Credentials = new NetworkCredential(username, password);
+//         var response = client.DownloadString(url);
+//         Console.WriteLine(response);
+//     }
+//     else if (state.Buttons[3])
+//     {
+//         Console.WriteLine("Move Up or Down");
+//         string username = "admin";
+//         string password = "Passwort";
+//         string domain = "Cam-IP";
+//         int port = 80;
+
+//         string command = "";
+//         if (moveCameraUp)
+//         {
+//             Console.WriteLine("Moving Camera Up");
+//             command = "ptzctrl.cgi?-step=0&-act=up&-speed=6";
+//             moveCameraUp = false;
+//         }
+//         else
+//         {
+//             Console.WriteLine("Moving Camera Down");
+//             command = "ptzctrl.cgi?-step=0&-act=down&-speed=6";
+//             moveCameraUp = true;
+//         }
+
+//         string url = "http://" + domain + ":" + port + "/" + command;
+//         var client = new WebClient();
+//         client.Credentials = new NetworkCredential(username, password);
+//         var response = client.DownloadString(url);
+//         Console.WriteLine(response);
+//     }
+// }
+// }
+//     }
+// }

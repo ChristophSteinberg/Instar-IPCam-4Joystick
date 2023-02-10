@@ -1,16 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>.NETFramework,Version=v4.0</TargetFramework>
-  </PropertyGroup>
- <ItemGroup>
-  <Reference Include="SharpDX.DirectInput">
-    <HintPath>Pfad\SharpDX.DirectInput.dll</HintPath>
-  </Reference>
-</ItemGroup>
- <ItemGroup>
-   <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
- </ItemGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <AssemblyName>camcontrol</AssemblyName>
+     </PropertyGroup>
+  
+  <ItemGroup>
+    
+    <PackageReference Include="Silk.NET.Input" Version="2.16.0" />
+  </ItemGroup>
 
 </Project>
-
