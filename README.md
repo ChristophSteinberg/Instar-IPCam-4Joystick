@@ -17,6 +17,7 @@ Additionally, the code does not handle exceptions and errors, which should be ad
 You can edit the code to add more functions and buttons, also on this website you can check your configuration of your pad, joystick e.g. 
 ---> https://gamepad-tester.com/
 
+All CGI actions for Instar Cam 9020HD on: https://wiki.instar.com/de/1080p_Serie_CGI_Befehle/Komplette_CGI_Liste/
 Microsoft.NET.Sdk
 .NETFramework,Version=v4.0
 SharpDX.DirectInput
