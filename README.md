@@ -33,5 +33,6 @@ dotnet run
 ```
 
 you can use a batchfile to start the app minimized and open the bowser to your cam
-
+```bash
 start /min "" "path to your app\myapp.exe" 
+```
