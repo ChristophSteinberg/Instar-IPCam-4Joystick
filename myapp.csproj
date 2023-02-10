@@ -1,16 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>.NETFramework,Version=v4.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
- <ItemGroup>
-  <Reference Include="SharpDX.DirectInput">
-    <HintPath>Pfad\SharpDX.DirectInput.dll</HintPath>
-  </Reference>
-</ItemGroup>
- <ItemGroup>
-   <PackageReference Include="SharpDX.DirectInput" Version="4.2.0" />
- </ItemGroup>
+  <!-- <ItemGroup>
+    <Reference Include="SharpDX.DirectInput">
+      <HintPath>Pfad\SharpDX.DirectInput.dll</HintPath>
+    </Reference>
+  </ItemGroup> -->
+  <ItemGroup>
+    <!-- <PackageReference Include="DXNET" Version="5.0.0" /> -->
+    <!-- <PackageReference Include="DXNET.XInput" Version="5.0.0" /> -->
+    <!-- <PackageReference Include="Silk.NET" Version="2.16.0" /> -->
+    <!-- <PackageReference Include="Silk.NET.Direct3D11" Version="2.16.0" /> -->
+    <PackageReference Include="Silk.NET.Input" Version="2.16.0" />
+  </ItemGroup>
 
 </Project>
-
