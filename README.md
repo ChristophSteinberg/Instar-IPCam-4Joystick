@@ -1,4 +1,4 @@
-# Instar-IPCam-4Joystick
+# Instar-IPCam- USB Joystick Controller
 This is a C# program that uses the SharpDX DirectInput library to control a camera. 
 The camera is connected to a network and can be controlled by sending HTTP requests to it. 
 The program polls a joystick for button presses and sends the appropriate commands to the camera based on the button presses.
