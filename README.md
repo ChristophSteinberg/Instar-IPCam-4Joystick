@@ -13,3 +13,14 @@ The WebClient class sends an HTTP request to the URL and retrieves the response 
 It's important to note that the hardcoded username, password, 
 and IP address of the camera in the code should not be used in production and should be replaced with secure and unique values. 
 Additionally, the code does not handle exceptions and errors, which should be added to improve its robustness.
+
+You can edit the code to add more functions and buttons, also on this website you can check your configuration of your pad, joystick e.g. 
+---> https://gamepad-tester.com/
+
+Microsoft.NET.Sdk
+.NETFramework,Version=v4.0
+SharpDX.DirectInput
+SharpDX --version 4.2.0
+actions to build an .exe file:
+dotnet build
+dotnet run
