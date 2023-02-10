@@ -1,9 +1,10 @@
 # Instar-IPCam- USB Joystick Controller
 
 This is a C# program that uses the Silk.NET library to control a camera through a joystick. 
-The program takes four command line arguments: the username, password, domain, and port used to connect to the camera's API.
+The program takes four command line arguments: the username, password, domain, and port 
+used to connect to the camera's API.
 
-The main function creates a window and sets event handlers for the load and update events. 
+The main function creates a window and sets event handlers for the load and update events.
 The OnLoad function initializes the joystick and the OnUpdate function moves the camera based on the joystick's position.
 
 The InitializeWebClient function sets up an HTTP client to communicate with the camera's API, 
