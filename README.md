@@ -19,14 +19,18 @@ You can edit the code to add more functions and buttons, also on this website yo
 
 All CGI actions for Instar Cam 9020HD on: https://wiki.instar.com/de/1080p_Serie_CGI_Befehle/Komplette_CGI_Liste/
 
-Microsoft.NET.Sdk
-.NETFramework,Version=v4.0
-SharpDX.DirectInput
-SharpDX --version 4.2.0
-actions to build an .exe file:
-###Run and build
+## Developer info
+### Install 
+Microsoft.NET.Sdk, .NETFramework,Version=v4.0, SharpDX.DirectInput, SharpDX --version 4.2.0
+
+### Run and build the app
+First you have to install all packages from above.
+To build an exe file:
+
+```bash
 dotnet build
 dotnet run
+```
 
 you can use a batchfile to start the app minimized and open the bowser to your cam
 
