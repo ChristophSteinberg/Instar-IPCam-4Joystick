@@ -24,6 +24,7 @@ Microsoft.NET.Sdk
 SharpDX.DirectInput
 SharpDX --version 4.2.0
 actions to build an .exe file:
+###Run and build
 dotnet build
 dotnet run
 
