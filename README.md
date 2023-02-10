@@ -25,3 +25,7 @@ SharpDX --version 4.2.0
 actions to build an .exe file:
 dotnet build
 dotnet run
+
+you can use a batchfile to start the app minimized and open the bowser to your cam
+
+start /min "" "path to your app\myapp.exe" 
