@@ -50,20 +50,22 @@ class Program
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
     }
 
-
     private static void Stop()
     {
         SendCommand($"ptzctrl.cgi?-step=0&-act=stop&-speed=63");
+        isZooming = false;
     }
 
     private static void ZoomIn()
     {
         SendCommand($"ptzctrl.cgi?-step=0&-act=zoomin&-speed=63");
+        isZooming = true;
     }
 
     private static void ZoomOut()
     {
         SendCommand($"ptzctrl.cgi?-step=0&-act=zoomout&-speed=63");
+        isZooming = true;
     }
 
     private static void MoveHorizontal(int speed)
@@ -80,7 +82,6 @@ class Program
 
     private static void SendCommand(string command)
     {
-        // return;
         string url = host + ":" + port + "/" + command;
         Console.WriteLine(url);
         try
@@ -97,13 +98,6 @@ class Program
     private static void OnLoad()
     {
         var input = window.CreateInput();
-
-        var h2 = input.Gamepads.Where(j => j.IsConnected).ToArray();
-        var h1 = input.Joysticks.Where(j => j.IsConnected).ToArray();
-        var h3 = input.OtherDevices.Where(j => j.IsConnected).ToArray();
-
-
-
         joystick = input.Joysticks.FirstOrDefault();
     }
 
@@ -115,21 +109,19 @@ class Program
         if (joystick.Hats[0].Position == Position2D.Up)
         {
             ZoomIn();
-            isZooming = true;
+
         }
         else if (joystick.Hats[0].Position == Position2D.Down)
         {
             ZoomOut();
-            isZooming = true;
         }
         else
         {
-
             if (isZooming)
             {
                 Stop();
-                isZooming = false;
             }
+
             if (Math.Abs(horizontal) > Math.Abs(vertical))
             {
                 MoveHorizontal(horizontal);
