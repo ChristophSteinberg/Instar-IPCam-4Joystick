@@ -109,7 +109,6 @@ class Program
         if (joystick.Hats[0].Position == Position2D.Up)
         {
             ZoomIn();
-
         }
         else if (joystick.Hats[0].Position == Position2D.Down)
         {
