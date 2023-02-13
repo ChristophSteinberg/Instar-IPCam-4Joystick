@@ -115,12 +115,12 @@ class Program
         if (joystick.Hats[0].Position == Position2D.Up)
         {
             ZoomIn();
-            isZooming = false;
+            isZooming = true;
         }
         else if (joystick.Hats[0].Position == Position2D.Down)
         {
             ZoomOut();
-            isZooming = false;
+            isZooming = true;
         }
         else
         {
