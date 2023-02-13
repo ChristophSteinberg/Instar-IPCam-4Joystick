@@ -49,6 +49,16 @@ class Program
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
     }
 
+    private static void ZoomIn()
+    {
+        Console.WriteLine("ZoomIn");
+    }
+
+    private static void ZoomOut()
+    {
+        Console.WriteLine("ZoomOut");
+    }
+
     private static void MoveHorizontal(int speed)
     {
         string direction = speed > 0 ? "right" : "left";
@@ -63,7 +73,7 @@ class Program
 
     private static void SendCommand(string command)
     {
-        return;
+        // return;
         string url = host + ":" + port + "/" + command;
         Console.WriteLine(url);
         try
@@ -80,6 +90,13 @@ class Program
     private static void OnLoad()
     {
         var input = window.CreateInput();
+
+        var h2 = input.Gamepads.Where(j => j.IsConnected).ToArray();
+        var h1 = input.Joysticks.Where(j => j.IsConnected).ToArray();
+        var h3 = input.OtherDevices.Where(j => j.IsConnected).ToArray();
+
+
+
         joystick = input.Joysticks.FirstOrDefault();
     }
 
@@ -88,24 +105,25 @@ class Program
         var horizontal = (int)(joystick.Axes[0].Position * 30);
         var vertical = (int)(joystick.Axes[1].Position * 30);
 
-        foreach (var hat in joystick.Hats)
+        if (joystick.Hats[0].Position == Position2D.Up)
         {
-            Console.WriteLine($"Hat index: {hat.Index} position: {hat.Position}");
+            ZoomIn();
         }
-
-        foreach (var axis in joystick.Axes)
+        else if (joystick.Hats[0].Position == Position2D.Down)
         {
-            Console.WriteLine($"Axis index: {axis.Index} position: {axis.Position}");
-        }
-
-
-        if (Math.Abs(horizontal) > Math.Abs(vertical))
-        {
-            MoveHorizontal(horizontal);
+            ZoomOut();
         }
         else
         {
-            MoveVertical(vertical);
+
+            if (Math.Abs(horizontal) > Math.Abs(vertical))
+            {
+                MoveHorizontal(horizontal);
+            }
+            else
+            {
+                MoveVertical(vertical);
+            }
         }
     }
 }
