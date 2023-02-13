@@ -16,6 +16,7 @@ class Program
     private static string password;
     private static string host;
     private static string port;
+    private static bool isZooming = false;
 
     static void Main(string[] args)
     {
@@ -47,6 +48,12 @@ class Program
         client = new HttpClient();
         var byteArray = Encoding.ASCII.GetBytes($"{username}:{password}");
         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(byteArray));
+    }
+
+
+    private static void Stop()
+    {
+        SendCommand($"ptzctrl.cgi?-step=0&-act=stop&-speed=63");
     }
 
     private static void ZoomIn()
@@ -108,14 +115,21 @@ class Program
         if (joystick.Hats[0].Position == Position2D.Up)
         {
             ZoomIn();
+            isZooming = false;
         }
         else if (joystick.Hats[0].Position == Position2D.Down)
         {
             ZoomOut();
+            isZooming = false;
         }
         else
         {
 
+            if (isZooming)
+            {
+                Stop();
+                isZooming = false;
+            }
             if (Math.Abs(horizontal) > Math.Abs(vertical))
             {
                 MoveHorizontal(horizontal);
