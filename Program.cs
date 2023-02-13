@@ -63,6 +63,7 @@ class Program
 
     private static void SendCommand(string command)
     {
+        return;
         string url = host + ":" + port + "/" + command;
         Console.WriteLine(url);
         try
@@ -86,6 +87,17 @@ class Program
     {
         var horizontal = (int)(joystick.Axes[0].Position * 30);
         var vertical = (int)(joystick.Axes[1].Position * 30);
+
+        foreach (var hat in joystick.Hats)
+        {
+            Console.WriteLine($"Hat index: {hat.Index} position: {hat.Position}");
+        }
+
+        foreach (var axis in joystick.Axes)
+        {
+            Console.WriteLine($"Axis index: {axis.Index} position: {axis.Position}");
+        }
+
 
         if (Math.Abs(horizontal) > Math.Abs(vertical))
         {

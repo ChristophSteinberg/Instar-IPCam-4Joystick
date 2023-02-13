@@ -6,7 +6,6 @@
      </PropertyGroup>
   
   <ItemGroup>
-    
     <PackageReference Include="Silk.NET.Input" Version="2.16.0" />
   </ItemGroup>
 
