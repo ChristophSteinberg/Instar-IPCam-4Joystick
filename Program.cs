@@ -51,12 +51,12 @@ class Program
 
     private static void ZoomIn()
     {
-        Console.WriteLine("ZoomIn");
+        SendCommand($"ptzctrl.cgi?-step=0&-act=zoomin&-speed=63");
     }
 
     private static void ZoomOut()
     {
-        Console.WriteLine("ZoomOut");
+        SendCommand($"ptzctrl.cgi?-step=0&-act=zoomout&-speed=63");
     }
 
     private static void MoveHorizontal(int speed)
