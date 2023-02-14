@@ -4,7 +4,7 @@ This is a C# program that uses the Silk.NET library to control a camera through 
 The program takes four command line arguments: the username, password, domain, and port 
 used to connect to the camera's API.
 
-Functions: Move Up, Move Down, Move Left, Move Right, Zoom In, Zoom Out, Auotfocus after Zooming.
+Functions: Move Up, Move Down, Move Left, Move Right, Zoom In, Zoom Out, Autofocus after Zooming.
 
 The main function creates a window and sets event handlers for the load and update events.
 The OnLoad function initializes the joystick and the OnUpdate function moves the camera based on the joystick's position.
